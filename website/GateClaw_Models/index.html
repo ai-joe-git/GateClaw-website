@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateClaw Model Registry — 40+ AI Providers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-hover: #252535;
+            --accent-primary: #3366ff;
+            --accent-secondary: #6699ff;
+            --accent-glow: rgba(51, 102, 255, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-1: linear-gradient(135deg, #3366ff 0%, #6699ff 100%);
+            --shadow-glow: 0 0 50px var(--accent-glow), 0 0 100px var(--accent-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #33ff66;
+            --warning: #ffcc33;
+            --danger: #ff3333;
+            --info: #33ccff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: rgba(51, 102, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgba(51, 102, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(51, 102, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(102, 153, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            box-shadow: 0 0 30px var(--accent-primary), 0 0 60px var(--accent-primary);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '🤖';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 0.9rem;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            padding: 2px;
+            line-height: 1;
+        }
+
+        .logo-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            color: var(--accent-primary);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 0.65rem 1.25rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn.secondary:hover {
+            border-color: var(--accent-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 5%;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(51, 102, 255, 0.15);
+            border: 1px solid var(--accent-primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title-group {
+            max-width: 600px;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .sort-dropdown {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .sort-dropdown:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        /* Provider Grid */
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .provider-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .provider-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .provider-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .provider-card:hover::before {
+            opacity: 1;
+        }
+
+        .provider-card.featured {
+            border-left: 4px solid var(--warning);
+        }
+
+        .provider-card.popular {
+            border-left: 4px solid var(--success);
+        }
+
+        .provider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .provider-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .provider-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .provider-logo.ollama {
+            background: #000;
+            color: #fff;
+        }
+
+        .provider-logo.openai {
+            background: #4169e1;
+            color: #fff;
+        }
+
+        .provider-logo.anthropic {
+            background: #e78731;
+            color: #fff;
+        }
+
+        .provider-logo.google {
+            background: #4285f4;
+            color: #fff;
+        }
+
+        .provider-logo.meta {
+            background: #0668e1;
+            color: #fff;
+        }
+
+        .provider-logo.microsoft {
+            background: #00a4ef;
+            color: #fff;
+        }
+
+        .provider-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .provider-type {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .provider-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: rgba(51, 255, 102, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-beta {
+            background: rgba(255, 204, 51, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .provider-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .provider-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .spec-item {
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .spec-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .spec-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .provider-models {
+            margin-bottom: 1rem;
+        }
+
+        .models-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .model-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .model-tag {
+            padding: 0.35rem 0.65rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .model-tag.featured {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .provider-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
+        }
+
+        .provider-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .provider-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .provider-btn {
+            flex: 1;
+            padding: 0.65rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .provider-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .provider-btn.primary {
+            background: var(--gradient-1);
+            border: none;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .provider-btn.primary:hover {
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .comparison-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .comparison-table th {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--bg-hover);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .best-value {
+            background: rgba(51, 255, 102, 0.1);
+            border-left: 3px solid var(--success);
+        }
+
+        .performance-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .performance-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 3px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-api {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-api code {
+            color: var(--accent-secondary);
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            body {
+                font-size: 14px;
+                overflow-x: hidden;
+            }
+
+            .header-nav {
+                position: fixed;
+                top: var(--header-height, 60px);
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 15, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                border-bottom: 1px solid var(--border);
+                max-height: calc(100vh - var(--header-height, 60px));
+                overflow-y: auto;
+            }
+
+            .header-nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            main {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            h1, h2 {
+                word-wrap: break-word;
+                max-width: 100%;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+                word-wrap: break-word;
+            }
+
+            .provider-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .comparison-table {
+                overflow-x: auto;
+            }
+
+            .filter-group {
+                flex-wrap: wrap;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .provider-specs {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                min-height: 44px;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .provider-card {
+                padding: 1.25rem;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .hero-badge {
+                font-size: 0.75rem;
+                padding: 0.375rem 0.75rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .provider-brand {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">GateClaw <span>Models</span></div>
+            </a>
+            <nav class="header-nav" id="headerNav">
+                <a href="#featured" class="nav-link active">Featured</a>
+                <a href="#local" class="nav-link">Local</a>
+                <a href="#cloud" class="nav-link">Cloud</a>
+                <a href="#open-source" class="nav-link">Open Source</a>
+                <a href="#comparison" class="nav-link">Comparison</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search models...">
+                </div>
+                <button class="btn secondary" onclick="requestModel()">Request Model</button>
+                <a href="https://github.com/ai-joe-git/GateClaw" class="btn secondary" target="_blank">GitHub</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-badge">🤖 Model Registry</div>
+        <h1 class="hero-title">40+ AI Providers</h1>
+        <p class="hero-subtitle">Browse, compare, and benchmark AI models across 40+ providers. From local LLMs to cloud APIs, find the perfect model for your use case. GateClaw connects them all.</p>
+        
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">42</div>
+                <div class="stat-label">Providers</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">850+</div>
+                <div class="stat-label">Models</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Open API</div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <!-- Featured Providers -->
+        <section class="section" id="featured">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-icon">⭐</span>
+                    <h2 class="section-title">Featured Providers</h2>
+                    <p class="section-subtitle">Most popular, best performance, highest value. Start here.</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filter-group">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Local</button>
+                        <button class="filter-btn">Cloud</button>
+                        <button class="filter-btn">Open Source</button>
+                        <button class="filter-btn">Commercial</button>
+                    </div>
+                    <select class="sort-dropdown">
+                        <option>Sort: Popular</option>
+                        <option>Sort: Performance</option>
+                        <option>Sort: Cost (low-high)</option>
+                        <option>Sort: Context Window</option>
+                        <option>Sort: Name (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="provider-grid">
+                <div class="provider-card featured">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo ollama">🦙</div>
+                            <div>
+                                <h3 class="provider-name">Ollama</h3>
+                                <div class="provider-type">Local LLM Runner</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-active">Active</span>
+                    </div>
+                    <p class="provider-description">Local LLM runner with 100+ model support. Run Llama, Mistral, Qwen, and more on your hardware. Zero API costs, full privacy.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">128K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0 (self-hosted)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~2.3s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">100+ available</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Popular Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">qwen3.5:397b</span>
+                            <span class="model-tag">llama3.1:405b</span>
+                            <span class="model-tag">mistral:7b</span>
+                            <span class="model-tag">gemma2:9b</span>
+                            <span class="model-tag">phi3:14b</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 100+ models</div>
+                        <div class="provider-meta-item">⚡ localhost:11434</div>
+                        <div class="provider-meta-item">🔓 Open source</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Connect</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="provider-card popular">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo openai">🟦</div>
+                            <div>
+                                <h3 class="provider-name">OpenAI API</h3>
+                                <div class="provider-type">Cloud API</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-active">Active</span>
+                    </div>
+                    <p class="provider-description">Industry-leading LLMs: GPT-4, GPT-4o, GPT-3.5. Best for complex reasoning, coding, and creative tasks. Pay-per-token pricing.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">128K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0.03/1K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~1.8s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">15 available</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Popular Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">gpt-4o</span>
+                            <span class="model-tag">gpt-4-turbo</span>
+                            <span class="model-tag">gpt-3.5-turbo</span>
+                            <span class="model-tag">o1-preview</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 15 models</div>
+                        <div class="provider-meta-item">⚡ api.openai.com</div>
+                        <div class="provider-meta-item">🔑 API key</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Connect</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="provider-card popular">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo anthropic">🟧</div>
+                            <div>
+                                <h3 class="provider-name">Anthropic</h3>
+                                <div class="provider-type">Cloud API</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-active">Active</span>
+                    </div>
+                    <p class="provider-description">Claude 3.5 Sonnet, Opus, Haiku. Best for long-context tasks, document analysis, and safe AI outputs. Constitutional AI approach.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">200K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0.03/1K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~2.1s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">8 available</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Popular Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">claude-3.5-sonnet</span>
+                            <span class="model-tag">claude-3-opus</span>
+                            <span class="model-tag">claude-3-haiku</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 8 models</div>
+                        <div class="provider-meta-item">⚡ api.anthropic.com</div>
+                        <div class="provider-meta-item">🔑 API key</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Connect</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo meta">📘</div>
+                            <div>
+                                <h3 class="provider-name">Meta (Llama)</h3>
+                                <div class="provider-type">Open Source</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-active">Active</span>
+                    </div>
+                    <p class="provider-description">Llama 3.1, 3.2 series. Open weights, commercial use allowed. Best open-source models for self-hosting. Community fine-tunes available.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">128K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0 (self-hosted)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~2.5s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">50+ variants</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Popular Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">llama3.1:405b</span>
+                            <span class="model-tag">llama3.1:70b</span>
+                            <span class="model-tag">llama3.2:11b</span>
+                            <span class="model-tag">llama3.2:3b</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 50+ variants</div>
+                        <div class="provider-meta-item">⚡ Self-hosted</div>
+                        <div class="provider-meta-item">🔓 Open weights</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Download</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo lmstudio">📱</div>
+                            <div>
+                                <h3 class="provider-name">LM Studio</h3>
+                                <div class="provider-type">Local LLM Server</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-active">Active</span>
+                    </div>
+                    <p class="provider-description">Local LLM server with GUI. Download, run, and test models. OpenAI-compatible API. Great for development and testing.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">Varies by model</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0 (self-hosted)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~2.8s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">24 loaded</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Popular Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">qwen2.5:72b</span>
+                            <span class="model-tag">llama3.1:70b</span>
+                            <span class="model-tag">mistral:7b</span>
+                            <span class="model-tag">phi3:14b</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 24 models</div>
+                        <div class="provider-meta-item">⚡ localhost:1234</div>
+                        <div class="provider-meta-item">🖥️ GUI included</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Connect</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo google">🔴</div>
+                            <div>
+                                <h3 class="provider-name">Google (Gemini)</h3>
+                                <div class="provider-type">Cloud API</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-beta">Beta</span>
+                    </div>
+                    <p class="provider-description">Gemini 1.5 Pro, Flash, Ultra. Multimodal models with vision, audio, code. Competitive pricing, strong Google ecosystem integration.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">1M tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0.025/1K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~2.0s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">10 available</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Popular Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">gemini-1.5-pro</span>
+                            <span class="model-tag">gemini-1.5-flash</span>
+                            <span class="model-tag">gemini-ultra</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 10 models</div>
+                        <div class="provider-meta-item">⚡ api.google.ai</div>
+                        <div class="provider-meta-item">🔑 API key</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Connect</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo microsoft">🪟</div>
+                            <div>
+                                <h3 class="provider-name">Microsoft (Azure)</h3>
+                                <div class="provider-type">Cloud API</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-active">Active</span>
+                    </div>
+                    <p class="provider-description">Azure OpenAI Service, Phi models, open models. Enterprise SLA, compliance, private deployment. Best for business workloads.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">128K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0.03/1K tokens</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~1.9s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">20 available</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Popular Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">gpt-4o</span>
+                            <span class="model-tag">phi-3:14b</span>
+                            <span class="model-tag">mistral-large</span>
+                            <span class="model-tag">llama3.1:70b</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 20 models</div>
+                        <div class="provider-meta-item">⚡ Azure endpoint</div>
+                        <div class="provider-meta-item">🏢 Enterprise</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Connect</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="provider-card">
+                    <div class="provider-header">
+                        <div class="provider-brand">
+                            <div class="provider-logo" style="background: #667eea;">🔀</div>
+                            <div>
+                                <h3 class="provider-name">llama-swap</h3>
+                                <div class="provider-type">Model Swapper</div>
+                            </div>
+                        </div>
+                        <span class="provider-status status-active">Active</span>
+                    </div>
+                    <p class="provider-description">Swap between multiple LLMs dynamically. Load/unload models on demand. Memory-efficient for running multiple models on one GPU.</p>
+                    <div class="provider-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Context Window</div>
+                            <div class="spec-value">Varies by model</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cost</div>
+                            <div class="spec-value">$0 (self-hosted)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Latency</div>
+                            <div class="spec-value">~3.0s avg</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Models</div>
+                            <div class="spec-value">6 configured</div>
+                        </div>
+                    </div>
+                    <div class="provider-models">
+                        <div class="models-title">Configured Models:</div>
+                        <div class="model-list">
+                            <span class="model-tag featured">qwen3.5:397b</span>
+                            <span class="model-tag">llama3.1:405b</span>
+                            <span class="model-tag">mistral:7b</span>
+                            <span class="model-tag">gemma2:9b</span>
+                        </div>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 6 models</div>
+                        <div class="provider-meta-item">⚡ localhost:1337</div>
+                        <div class="provider-meta-item">🔀 Hot-swap</div>
+                    </div>
+                    <div class="provider-actions">
+                        <a href="#" class="provider-btn primary">Connect</a>
+                        <a href="#" class="provider-btn">Benchmarks</a>
+                        <a href="#" class="provider-btn">Guide</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table -->
+        <section class="section" id="comparison">
+            <div class="comparison-section">
+                <h2 class="comparison-title">⚖️ Model Comparison</h2>
+                <p class="section-subtitle" style="text-align: center; margin-bottom: 1.5rem;">Side-by-side comparison of top models. Compare performance, cost, and capabilities.</p>
+                
+                <div class="table-container">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Provider</th>
+                                <th>Context</th>
+                                <th>Cost/1K</th>
+                                <th>Latency</th>
+                                <th>Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="best-value">
+                                <td><strong>qwen3.5:397b</strong></td>
+                                <td>Ollama Cloud</td>
+                                <td>128K</td>
+                                <td>$0</td>
+                                <td>2.3s</td>
+                                <td>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 95%"></div>
+                                    </div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">95/100</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>gpt-4o</strong></td>
+                                <td>OpenAI</td>
+                                <td>128K</td>
+                                <td>$0.03</td>
+                                <td>1.8s</td>
+                                <td>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 98%"></div>
+                                    </div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">98/100</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>claude-3.5-sonnet</strong></td>
+                                <td>Anthropic</td>
+                                <td>200K</td>
+                                <td>$0.03</td>
+                                <td>2.1s</td>
+                                <td>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 96%"></div>
+                                    </div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">96/100</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>llama3.1:405b</strong></td>
+                                <td>Meta</td>
+                                <td>128K</td>
+                                <td>$0</td>
+                                <td>2.5s</td>
+                                <td>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 92%"></div>
+                                    </div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">92/100</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>gemini-1.5-pro</strong></td>
+                                <td>Google</td>
+                                <td>1M</td>
+                                <td>$0.025</td>
+                                <td>2.0s</td>
+                                <td>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 94%"></div>
+                                    </div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">94/100</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>mistral-large</strong></td>
+                                <td>Mistral</td>
+                                <td>128K</td>
+                                <td>$0.02</td>
+                                <td>1.9s</td>
+                                <td>
+                                    <div class="performance-bar">
+                                        <div class="performance-fill" style="width: 90%"></div>
+                                    </div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">90/100</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                GateClaw Model Registry — 40+ AI Providers, 850+ Models
+            </p>
+            <p class="footer-text">
+                <a href="https://github.com/ai-joe-git/GateClaw" class="footer-link" target="_blank">GitHub</a> •
+                <a href="#" class="footer-link">Model Benchmarks</a> •
+                <a href="#" class="footer-link">API Reference</a> •
+                <a href="#" class="footer-link">Request Model</a> •
+                <a href="#" class="footer-link">Provider Setup</a>
+            </p>
+            <div class="footer-api">
+                Models API: <code>GET /api/v1/models</code> • Providers: <code>GET /api/v1/providers</code> • Benchmarks: <code>GET /api/v1/benchmarks</code>
+            </div>
+            <p class="footer-text" style="margin-top: 1rem;" id="currentDate"></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentDate').textContent = 'Last updated: ' + new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const headerNav = document.querySelector('.header-nav');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                headerNav.classList.toggle('active');
+            });
+            
+            // Close menu when clicking nav link
+            headerNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('active');
+                    headerNav.classList.remove('active');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!headerNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    headerNav.classList.remove('active');
+                }
+            });
+        }
+
+        function requestModel() {
+            alert('🤖 Request a Model\n\nTell us which model or provider you want added:\n\n1. Visit GitHub Issues\n2. Create "Model Request" issue\n3. Include model name, provider, use case\n4. We prioritize by community demand\n\nMost requested: Groq, Cohere, HuggingFace');
+        }
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.provider-card').forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Nav scroll highlight
+        window.addEventListener('scroll', () => {
+            const sections = ['featured', 'local', 'cloud', 'open-source', 'comparison'];
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    const top = section.offsetTop;
+                    const bottom = top + section.offsetHeight;
+
+                    if (scrollPos >= top && scrollPos < bottom) {
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

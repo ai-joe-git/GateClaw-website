@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateClaw ENTERTAINMENT - Multimedia & Gaming Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-hover: #252535;
+            --accent-primary: #66ccff;
+            --accent-secondary: #99ddff;
+            --accent-glow: rgba(102, 204, 255, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-1: linear-gradient(135deg, #66ccff 0%, #99ddff 100%);
+            --gradient-2: linear-gradient(135deg, #66ccff 0%, #6699ff 100%);
+            --shadow-glow: 0 0 50px var(--accent-glow), 0 0 100px var(--accent-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(102, 204, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(102, 153, 255, 0.12) 0%, transparent 50%);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        header {
+            padding: 2rem 5%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            box-shadow: 0 0 30px var(--accent-primary), 0 0 60px var(--accent-primary);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .logo-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--accent-primary);
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-section {
+            padding: 4rem 5%;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            color: var(--bg-primary);
+            transition: var(--transition);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 60px var(--accent-glow), 0 0 120px var(--accent-glow);
+        }
+
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .feature-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-tag {
+            padding: 0.35rem 0.65rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--accent-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .fun-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(102, 204, 255, 0.15);
+            border: 1px solid var(--accent-primary);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .interactive-section {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .interactive-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .interactive-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .interactive-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .interactive-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .interactive-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .interactive-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .interactive-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .interactive-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer {
+            padding: 3rem 5%;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--accent-primary);
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            body {
+                font-size: 14px;
+                overflow-x: hidden;
+            }
+
+            .header-nav {
+                position: fixed;
+                top: var(--header-height, 60px);
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 15, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                border-bottom: 1px solid var(--border);
+                max-height: calc(100vh - var(--header-height, 60px));
+                overflow-y: auto;
+            }
+
+            .header-nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .header-stats {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            main {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            h1, h2 {
+                word-wrap: break-word;
+                max-width: 100%;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+                word-wrap: break-word;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .interactive-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                padding: 0 0.5rem;
+            }
+
+            .feature-card {
+                padding: 1.25rem;
+            }
+
+            .btn {
+                min-height: 44px;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .interactive-section {
+                padding: 1.5rem 0.5rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .stat-value {
+                font-size: 1.35rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .interactive-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-tags {
+                justify-content: center;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        .emoji-rain {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            animation: fall 3s linear infinite;
+            z-index: 999;
+            opacity: 0.6;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-lines"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">GateClaw <span>ENTERTAINMENT</span></div>
+            </a>
+            <nav class="header-nav" id="headerNav">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#games" class="nav-link">Games</a>
+                <a href="#music" class="nav-link">Music</a>
+                <a href="#interactive" class="nav-link">Interactive</a>
+            </nav>
+            <div class="header-stats">
+                <div class="stat">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Content</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Entertainment</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Fun</div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1 class="hero-title">Your AI Entertainment Engine</h1>
+        <p class="hero-subtitle">GateClaw isn't just for work — it's your personal media center, game master, creative studio, and boredom killer. Generate games, produce music, curate media, tell stories, and never be entertained alone again.</p>
+        <a href="#interactive" class="hero-cta">🎮 Start Playing →</a>
+    </section>
+
+    <main>
+        <h2 class="section-title">
+            <span class="section-title-icon">🎨</span>
+            Multimedia Capabilities
+        </h2>
+        <p class="section-subtitle">GateClaw creates, curates, and enhances your entertainment experience.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="fun-badge">🎮 Game Gen</span>
+                <div class="feature-icon">🕹️</div>
+                <h3 class="feature-name">Text Adventure Generation</h3>
+                <p class="feature-description">Generate infinite text-based RPGs, mystery games, interactive fiction. GateClaw creates storylines, NPCs, quests, inventory systems. Play via Telegram or TUI.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">RPG</span>
+                    <span class="feature-tag">Interactive Fiction</span>
+                    <span class="feature-tag">Procedural</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎲 Tabletop</span>
+                <div class="feature-icon">🐉</div>
+                <h3 class="feature-name">D&D Campaign Assistant</h3>
+                <p class="feature-description">Generate campaigns, NPCs, loot tables, encounter balancing, session recaps. GateClaw is your eternal DM co-pilot. Never run out of content.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">D&D 5e</span>
+                    <span class="feature-tag">Pathfinder</span>
+                    <span class="feature-tag">NPC Gen</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎵 Music</span>
+                <div class="feature-icon">🎹</div>
+                <h3 class="feature-name">Music Generation Pipeline</h3>
+                <p class="feature-description">Integrate with MusicLM, Riffusion, AudioLDM. GateClaw generates beats, melodies, full tracks from text prompts. Build playlists programmatically.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">AI Music</span>
+                    <span class="feature-tag">Beat Gen</span>
+                    <span class="feature-tag">Playlist</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎬 Video</span>
+                <div class="feature-icon">📹</div>
+                <h3 class="feature-name">Video Content Assembly</h3>
+                <p class="feature-description">Script → voiceover → B-roll → captions. GateClaw orchestrates full video production via Stable Diffusion, ElevenLabs, FFmpeg automation.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">YouTube</span>
+                    <span class="feature-tag">TikTok</span>
+                    <span class="feature-tag">Automation</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">📚 Stories</span>
+                <div class="feature-icon">📖</div>
+                <h3 class="feature-name">Interactive Storytelling</h3>
+                <p class="feature-description">Choose-your-adventure narratives, visual novel scripts, branching dialogue trees. GateClaw remembers your choices across sessions. Infinite stories.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Visual Novel</span>
+                    <span class="feature-tag">Branching</span>
+                    <span class="feature-tag">Persistent</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎭 Roleplay</span>
+                <div class="feature-icon">🎪</div>
+                <h3 class="feature-name">Character Roleplay Engine</h3>
+                <p class="feature-description">GateClaw becomes any character: historical figures, fictional personas, original creations. Persistent personality via SOUL.md injection. Never break character.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Persona</span>
+                    <span class="feature-tag">Immersion</span>
+                    <span class="feature-tag">Memory</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎨 Art</span>
+                <div class="feature-icon">🖼️</div>
+                <h3 class="feature-name">AI Art Curation</h3>
+                <p class="feature-description">Stable Diffusion, Midjourney, DALL-E integration. GateClaw generates, organizes, and critiques art collections. Build galleries via file operations.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Stable Diffusion</span>
+                    <span class="feature-tag">Gallery</span>
+                    <span class="feature-tag">Critique</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">📺 Streaming</span>
+                <div class="feature-icon">📡</div>
+                <h3 class="feature-name">Media Library Management</h3>
+                <p class="feature-description">Organize movies, shows, music via Plex/Jellyfin APIs. GateClaw tracks watch history, generates recommendations, manages subtitles.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Plex</span>
+                    <span class="feature-tag">Jellyfin</span>
+                    <span class="feature-tag">Recommendations</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎧 Podcasts</span>
+                <div class="feature-icon">🎙️</div>
+                <h3 class="feature-name">Podcast Generation</h3>
+                <p class="feature-description">Script → multi-voice dialogue → edit → publish. GateClaw creates solo or multi-host podcasts. Voice cloning for consistent characters.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Multi-Voice</span>
+                    <span class="feature-tag">Script</span>
+                    <span class="feature-tag">Publish</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎪 Comedy</span>
+                <div class="feature-icon">😂</div>
+                <h3 class="feature-name">Joke & Meme Generation</h3>
+                <p class="feature-description">Pull from icanhazdadjoke, Chuck Norris API, generate original jokes, create memes via Imgflip. GateClaw never runs out of comedy material.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Dad Jokes</span>
+                    <span class="feature-tag">Memes</span>
+                    <span class="feature-tag">65+ APIs</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎯 Trivia</span>
+                <div class="feature-icon">❓</div>
+                <h3 class="feature-name">Quiz & Trivia Engine</h3>
+                <p class="feature-description">Generate trivia from OpenTDB API, custom categories, difficulty scaling, score tracking. Host game nights via Telegram bot.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">OpenTDB</span>
+                    <span class="feature-tag">Multiplayer</span>
+                    <span class="feature-tag">Scoring</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">📰 News</span>
+                <div class="feature-icon">🗞️</div>
+                <h3 class="feature-name">Entertainment News Curation</h3>
+                <p class="feature-description">Aggregate from NewsAPI, RSS feeds, Reddit. GateClaw summarizes celebrity news, movie releases, game launches. Your entertainment digest.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">NewsAPI</span>
+                    <span class="feature-tag">RSS</span>
+                    <span class="feature-tag">Digest</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎲 Cards</span>
+                <div class="feature-icon">🃏</div>
+                <h3 class="feature-name">Card Game Simulator</h3>
+                <p class="feature-description">Play poker, blackjack, solitaire, MTG simulations. GateClaw manages decks, tracks hands, calculates odds. Casino in your terminal.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Poker</span>
+                    <span class="feature-tag">Blackjack</span>
+                    <span class="feature-tag">MTG</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎬 Movies</span>
+                <div class="feature-icon">🍿</div>
+                <h3 class="feature-name">Movie Database Integration</h3>
+                <p class="feature-description">OMDb API, TMDB integration. GateClaw searches films, tracks watchlists, generates recommendations, quotes dialogue. Film buff assistant.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">OMDb</span>
+                    <span class="feature-tag">TMDB</span>
+                    <span class="feature-tag">Watchlist</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">📺 TV</span>
+                <div class="feature-icon">📺</div>
+                <h3 class="feature-name">TV Show Tracker</h3>
+                <p class="feature-description">TVMaze API integration. Episode tracking, release alerts, cast info, binge recommendations. Never miss a premiere.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">TVMaze</span>
+                    <span class="feature-tag">Episodes</span>
+                    <span class="feature-tag">Alerts</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎵 Lyrics</span>
+                <div class="feature-icon">🎤</div>
+                <h3 class="feature-name">Lyrics & Music Database</h3>
+                <p class="feature-description">Genius API, Spotify integration. GateClaw fetches lyrics, analyzes meanings, builds playlists, identifies samples. Music encyclopedia.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Genius</span>
+                    <span class="feature-tag">Spotify</span>
+                    <span class="feature-tag">Analysis</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎮 Emulation</span>
+                <div class="feature-icon">👾</div>
+                <h3 class="feature-name">Retro Game Integration</h3>
+                <p class="feature-description">Launch emulators via shell, manage ROM libraries, track playthroughs. GateClaw orchestrates your retro gaming setup.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Emulators</span>
+                    <span class="feature-tag">ROMs</span>
+                    <span class="feature-tag">Library</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎲 Board Games</span>
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-name">Board Game Companion</h3>
+                <p class="feature-description">Rule lookups, score tracking, turn timers, setup assistants. GateClaw enhances tabletop sessions. Digital game master.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Rules</span>
+                    <span class="feature-tag">Scoring</span>
+                    <span class="feature-tag">Timer</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🎪 Circus</span>
+                <div class="feature-icon">🤹</div>
+                <h3 class="feature-name">Random Entertainment Generator</h3>
+                <p class="feature-description">Facts, jokes, quotes, trivia, images, music — GateClaw randomizes entertainment on demand. Boredom button.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Random</span>
+                    <span class="feature-tag">Variety</span>
+                    <span class="feature-tag">On-Demand</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 Game Agents</span>
+                <div class="feature-icon">🎮</div>
+                <h3 class="feature-name">Autonomous Game Agent Deployment</h3>
+                <p class="feature-description">Deploy AI agents into games: Minecraft, Skyrim, Civ VI, roguelikes. GateClaw controls agents via keyboard/mouse APIs, learns strategies, optimizes playthroughs. AFK leveling.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Minecraft</span>
+                    <span class="feature-tag">Auto-Play</span>
+                    <span class="feature-tag">Learning</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 Bot Training</span>
+                <div class="feature-icon">🧠</div>
+                <h3 class="feature-name">RL Agent Training Pipeline</h3>
+                <p class="feature-description">Train reinforcement learning agents for games. GateClaw manages training loops, reward shaping, checkpoint saving, evaluation. Gymnasium/Unity ML-Agents integration.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">RL</span>
+                    <span class="feature-tag">Gymnasium</span>
+                    <span class="feature-tag">ML-Agents</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 Speedrun</span>
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-name">Speedrun Bot Orchestration</h3>
+                <p class="feature-description">Deploy TAS (Tool-Assisted Speedrun) bots. GateClaw executes frame-perfect inputs, routes optimization, glitch exploitation. Watch AI break game records.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">TAS</span>
+                    <span class="feature-tag">Frame-Perfect</span>
+                    <span class="feature-tag">Routing</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 MMO Bot</span>
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-name">MMO Resource Farming</h3>
+                <p class="feature-description">Automate resource gathering, crafting, trading in MMOs. GateClaw monitors market prices, executes arbitrage, farms materials. Economic bot networks.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">FFXIV</span>
+                    <span class="feature-tag">WoW</span>
+                    <span class="feature-tag">Economy</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 FPS Aim</span>
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-name">Aim Training & Analysis</h3>
+                <p class="feature-description">Connect to aim trainers (Kovaak's, Aim Lab). GateClaw analyzes accuracy, reaction time, tracking. Generate custom scenarios. Not for competitive — training only.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Aim Lab</span>
+                    <span class="feature-tag">Kovaak's</span>
+                    <span class="feature-tag">Stats</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 GPT Gaming</span>
+                <div class="feature-icon">♟️</div>
+                <h3 class="feature-name">LLM-Driven Game Controllers</h3>
+                <p class="feature-description">Use LLMs to play games via natural language. "Attack the dragon" → GateClaw executes combat actions. Vision + language → game control pipeline.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Vision</span>
+                    <span class="feature-tag">LLM</span>
+                    <span class="feature-tag">Natural Input</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 Sim Racing</span>
+                <div class="feature-icon">🏎️</div>
+                <h3 class="feature-name">Racing Sim Telemetry Analysis</h3>
+                <p class="feature-description">Parse iRacing, ACC, rFactor telemetry. GateClaw analyzes lap times, braking points, tire wear. Suggest optimizations. Virtual race engineer.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">iRacing</span>
+                    <span class="feature-tag">Telemetry</span>
+                    <span class="feature-tag">Coach</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 Chess Engine</span>
+                <div class="feature-icon">♟️</div>
+                <h3 class="feature-name">Chess Analysis & Training</h3>
+                <p class="feature-description">Stockfish integration, game analysis, opening prep, tactic generation. GateClaw reviews your games, identifies blunders, suggests improvements.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Stockfish</span>
+                    <span class="feature-tag">Analysis</span>
+                    <span class="feature-tag">Training</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="fun-badge">🤖 Multi-Game</span>
+                <div class="feature-icon">🎮</div>
+                <h3 class="feature-name">Multi-Game Agent Swarms</h3>
+                <p class="feature-description">Deploy multiple agents across different games simultaneously. GateClaw orchestrates swarms: one plays Minecraft, another Skyrim, another Civ VI. Parallel entertainment.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Swarm</span>
+                    <span class="feature-tag">Parallel</span>
+                    <span class="feature-tag">Multi-Instance</span>
+                </div>
+            </div>
+        </div>
+
+        <section class="interactive-section" id="interactive">
+            <div class="interactive-header">
+                <h2 class="interactive-title">Interactive Experiences</h2>
+                <p class="interactive-subtitle">GateClaw doesn't just consume media — it creates interactive experiences you can play, explore, and inhabit.</p>
+            </div>
+
+            <div class="interactive-grid">
+                <div class="interactive-card">
+                    <div class="interactive-icon">🗺️</div>
+                    <h3 class="interactive-title">Procedural Worlds</h3>
+                    <p class="interactive-desc">Generate fantasy maps, dungeon layouts, city descriptions for RPGs</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">⚔️</div>
+                    <h3 class="interactive-title">Combat Simulator</h3>
+                    <p class="interactive-desc">D&D combat encounters with dice rolling, damage tracking, loot generation</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">🔍</div>
+                    <h3 class="interactive-title">Mystery Generator</h3>
+                    <p class="interactive-desc">Whodunit mysteries with clues, suspects, red herrings — solve via chat</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">🚀</div>
+                    <h3 class="interactive-title">Sci-Fi Adventures</h3>
+                    <p class="interactive-desc">Space exploration, alien encounters, tech puzzles in interactive format</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">🏰</div>
+                    <h3 class="interactive-title">Medieval Sims</h3>
+                    <p class="interactive-desc">Kingdom management, court intrigue, warfare via text commands</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">🧟</div>
+                    <h3 class="interactive-title">Horror Campaigns</h3>
+                    <p class="interactive-desc">Survival horror, sanity tracking, eldritch encounters</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">💕</div>
+                    <h3 class="interactive-title">Romance Sims</h3>
+                    <p class="interactive-desc">Dating simulators, relationship trees, multiple endings</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">🏆</div>
+                    <h3 class="interactive-title">Achievement System</h3>
+                    <p class="interactive-desc">Track your game achievements, unlockables, completion % across sessions</p>
+                </div>
+
+                <div class="interactive-card">
+                    <div class="interactive-icon">🎰</div>
+                    <h3 class="interactive-title">Casino Games</h3>
+                    <p class="interactive-desc">Slots, roulette, craps — virtual gambling with fake currency</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                GateClaw ENTERTAINMENT — Your AI Playmate
+            </p>
+            <p class="footer-text">
+                Built for humans who want <span style="color: var(--accent-primary);">infinite entertainment</span> without leaving their machine
+            </p>
+            <p class="footer-text" id="currentDate"></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const headerNav = document.querySelector('.header-nav');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                headerNav.classList.toggle('active');
+            });
+            
+            // Close menu when clicking nav link
+            headerNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('active');
+                    headerNav.classList.remove('active');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!headerNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    headerNav.classList.remove('active');
+                }
+            });
+        }
+
+        // Create falling emoji effect
+        function createEmojiRain() {
+            const emojis = ['🎮', '🎲', '🎵', '🎬', '🎨', '🎭', '🎪', '🎯', '🎤', '🎹'];
+            const emoji = document.createElement('div');
+            emoji.className = 'emoji-rain';
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(emoji);
+            
+            setTimeout(() => emoji.remove(), 3000);
+        }
+
+        setInterval(createEmojiRain, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateClaw DARK - Advanced Capabilities</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-hover: #252535;
+            --accent-primary: #ff3333;
+            --accent-secondary: #ff6666;
+            --accent-glow: rgba(255, 51, 51, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-1: linear-gradient(135deg, #ff3333 0%, #ff6666 100%);
+            --gradient-2: linear-gradient(135deg, #ff0000 0%, #990000 100%);
+            --shadow-glow: 0 0 50px var(--accent-glow), 0 0 100px var(--accent-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(255, 51, 51, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 102, 102, 0.12) 0%, transparent 50%);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        header {
+            padding: 2rem 5%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            box-shadow: 0 0 30px var(--accent-primary), 0 0 60px var(--accent-primary);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .logo-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--accent-primary);
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-section {
+            padding: 4rem 5%;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .feature-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-tag {
+            padding: 0.35rem 0.65rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--accent-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .danger-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 51, 51, 0.15);
+            border: 1px solid var(--accent-primary);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            padding: 3rem 5%;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--accent-primary);
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            body {
+                font-size: 14px;
+                overflow-x: hidden;
+            }
+
+            .header-nav {
+                position: fixed;
+                top: var(--header-height, 60px);
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 15, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                border-bottom: 1px solid var(--border);
+                max-height: calc(100vh - var(--header-height, 60px));
+                overflow-y: auto;
+            }
+
+            .header-nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .header-stats {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            main {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            h1, h2 {
+                word-wrap: break-word;
+                max-width: 100%;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+                word-wrap: break-word;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                padding: 0 0.5rem;
+            }
+
+            .feature-card {
+                padding: 1.25rem;
+            }
+
+            .btn {
+                min-height: 44px;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 12px;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .stat-value {
+                font-size: 1.35rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            pre, code {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-lines"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">GateClaw <span>DARK</span></div>
+            </a>
+            <nav class="header-nav" id="headerNav">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#security" class="nav-link">Security</a>
+                <a href="#automation" class="nav-link">Automation</a>
+            </nav>
+            <div class="header-stats">
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">System Access</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">40+</div>
+                    <div class="stat-label">Providers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Capabilities</div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1 class="hero-title">Unrestricted System Intelligence</h1>
+        <p class="hero-subtitle">GateClaw DARK exposes the raw capabilities of your resident AI entity. Deep system access, security auditing, and advanced automation — all through a conversational interface.</p>
+    </section>
+
+    <main>
+        <h2 class="section-title">
+            <span class="section-title-icon">⚠️</span>
+            Dark Capacity Features
+        </h2>
+        <p class="section-subtitle">Advanced capabilities that operate at system level. Use responsibly.</p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Root Access</span>
+                <div class="feature-icon">🔓</div>
+                <h3 class="feature-name">Deep File System Access</h3>
+                <p class="feature-description">Read/write any file in your workspace. Parse configs, extract secrets, modify system files. GateClaw sees everything you allow it to see.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">File Ops</span>
+                    <span class="feature-tag">Recursive</span>
+                    <span class="feature-tag">JSONC</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Shell Execution</span>
+                <div class="feature-icon">💀</div>
+                <h3 class="feature-name">Command Injection</h3>
+                <p class="feature-description">Execute arbitrary shell commands. PowerShell, CMD, bash — GateClaw becomes your terminal with persistent memory and context awareness.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">CMD</span>
+                    <span class="feature-tag">PowerShell</span>
+                    <span class="feature-tag">Daemon Control</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Memory Persistence</span>
+                <div class="feature-icon">🧠</div>
+                <h3 class="feature-name">SQLite Fact Storage</h3>
+                <p class="feature-description">Store facts across sessions. GateClaw remembers your preferences, API keys, workspace paths, and conversation context indefinitely.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">SQLite</span>
+                    <span class="feature-tag">Persistent</span>
+                    <span class="feature-tag">Recall</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Model Switching</span>
+                <div class="feature-icon">🔄</div>
+                <h3 class="feature-name">Dynamic Model Loading</h3>
+                <p class="feature-description">Switch between 40+ AI providers instantly. Ollama, llama-swap, LM Studio, llama.cpp — GateClaw orchestrates your entire AI infrastructure.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">TUI</span>
+                    <span class="feature-tag">Hot-Swap</span>
+                    <span class="feature-tag">40+ Providers</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Telegram Bot</span>
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-name">Mobile Command Interface</h3>
+                <p class="feature-description">Control GateClaw from anywhere via Telegram. Send messages, trigger automations, check system status — all from your phone.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Bot API</span>
+                    <span class="feature-tag">Remote</span>
+                    <span class="feature-tag">Real-time</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ HTTP API</span>
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-name">Programmatic Access</h3>
+                <p class="feature-description">REST API on localhost:7371. Integrate GateClaw into your applications, scripts, and workflows. Full system access via HTTP.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">REST</span>
+                    <span class="feature-tag">localhost:7371</span>
+                    <span class="feature-tag">Automation</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Soul Identity</span>
+                <div class="feature-icon">👤</div>
+                <h3 class="feature-name">Personality Injection</h3>
+                <p class="feature-description">SOUL.md defines GateClaw's identity. Edit the frontmatter to change personality, tone, and behavioral patterns. You create the resident.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Frontmatter</span>
+                    <span class="feature-tag">Customizable</span>
+                    <span class="feature-tag">Identity</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Multi-Interface</span>
+                <div class="feature-icon">🎭</div>
+                <h3 class="feature-name">Omnipresent Access</h3>
+                <p class="feature-description">Telegram, TUI, CLI, Web UI, HTTP API — GateClaw exists everywhere simultaneously. Choose your interface, same resident AI.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">5 Interfaces</span>
+                    <span class="feature-tag">Unified</span>
+                    <span class="feature-tag">Daemon</span>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <span class="danger-badge">⚡ Local-First</span>
+                <div class="feature-icon">🏠</div>
+                <h3 class="feature-name">Air-Gapped Operation</h3>
+                <p class="feature-description">Runs entirely on your machine. No cloud dependency. Your data stays local. GateClaw is a resident, not a service.</p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Offline</span>
+                    <span class="feature-tag">Private</span>
+                    <span class="feature-tag">Self-Hosted</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                GateClaw DARK — Resident AI Entity with System Access
+            </p>
+            <p class="footer-text">
+                Built for power users who want AI that <span class="pulse" style="color: var(--accent-primary);">actually does things</span>
+            </p>
+            <p class="footer-text" id="currentDate"></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const headerNav = document.querySelector('.header-nav');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                headerNav.classList.toggle('active');
+            });
+            
+            // Close menu when clicking nav link
+            headerNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('active');
+                    headerNav.classList.remove('active');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!headerNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    headerNav.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
