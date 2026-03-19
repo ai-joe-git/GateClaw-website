@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateClaw Blog — News, Updates & Tutorials</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-hover: #252535;
+            --accent-primary: #3366ff;
+            --accent-secondary: #6699ff;
+            --accent-glow: rgba(51, 102, 255, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-1: linear-gradient(135deg, #3366ff 0%, #6699ff 100%);
+            --shadow-glow: 0 0 50px var(--accent-glow), 0 0 100px var(--accent-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #33ff66;
+            --warning: #ffcc33;
+            --danger: #ff3333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: rgba(51, 102, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgba(51, 102, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(51, 102, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(102, 153, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            box-shadow: 0 0 30px var(--accent-primary), 0 0 60px var(--accent-primary);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '📰';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 0.9rem;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            padding: 2px;
+            line-height: 1;
+        }
+
+        .logo-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            color: var(--accent-primary);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.65rem 1rem 0.65rem 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 0.65rem 1.25rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn.secondary:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .btn.rss {
+            background: #ff9900;
+            color: #fff;
+            border: none;
+        }
+
+        .btn.rss:hover {
+            box-shadow: 0 0 30px rgba(255, 153, 0, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 5%;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(51, 102, 255, 0.15);
+            border: 1px solid var(--accent-primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .hero-newsletter {
+            max-width: 500px;
+            margin: 3rem auto 0 auto;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .newsletter-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .newsletter-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title-group {
+            max-width: 600px;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        /* Featured Post */
+        .featured-post {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .featured-post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .featured-post:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .featured-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background: rgba(255, 204, 51, 0.15);
+            border: 1px solid var(--warning);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--warning);
+            margin-bottom: 1rem;
+        }
+
+        .featured-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .featured-excerpt {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .featured-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .featured-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .featured-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .featured-tag {
+            padding: 0.35rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .featured-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .featured-cta:hover {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .featured-image {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(51, 102, 255, 0.1) 0%, rgba(102, 153, 255, 0.1) 100%);
+        }
+
+        /* Posts Grid */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .post-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .post-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+        }
+
+        .post-card:hover::before {
+            opacity: 1;
+        }
+
+        .post-card.announcement {
+            border-left: 4px solid var(--warning);
+        }
+
+        .post-card.tutorial {
+            border-left: 4px solid var(--success);
+        }
+
+        .post-card.changelog {
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .post-card.community {
+            border-left: 4px solid var(--info);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .post-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-announcement {
+            background: rgba(255, 204, 51, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .badge-tutorial {
+            background: rgba(51, 255, 102, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .badge-changelog {
+            background: rgba(51, 102, 255, 0.15);
+            color: var(--accent-primary);
+            border: 1px solid var(--accent-primary);
+        }
+
+        .badge-community {
+            background: rgba(51, 204, 255, 0.15);
+            color: var(--info);
+            border: 1px solid var(--info);
+        }
+
+        .post-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .post-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
+        }
+
+        .post-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .post-tag {
+            padding: 0.25rem 0.65rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .post-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.65rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .post-cta:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        /* Archive Section */
+        .archive-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+        }
+
+        .archive-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .archive-item {
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .archive-item:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .archive-month {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .archive-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 1024px) {
+            .header-nav {
+                display: none;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .featured-post {
+                grid-template-columns: 1fr;
+            }
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .newsletter-form {
+                flex-direction: column;
+            }
+            .newsletter-input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">GateClaw <span>Blog</span></div>
+            </a>
+            <nav class="header-nav">
+                <a href="#featured" class="nav-link active">Featured</a>
+                <a href="#latest" class="nav-link">Latest</a>
+                <a href="#tutorials" class="nav-link">Tutorials</a>
+                <a href="#changelogs" class="nav-link">Changelogs</a>
+                <a href="#archive" class="nav-link">Archive</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search posts...">
+                </div>
+                <button class="btn rss" onclick="subscribeRSS()">📡 RSS</button>
+                <a href="https://github.com/gateclaw/gateclaw" class="btn secondary" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-badge">📰 Latest News</div>
+        <h1 class="hero-title">GateClaw Blog</h1>
+        <p class="hero-subtitle">Stay updated with release notes, feature announcements, tutorials, community spotlights, and deep-dives into GateClaw's capabilities. Subscribe to never miss an update.</p>
+        
+        <div class="hero-newsletter">
+            <h3 class="newsletter-title">📬 Subscribe to Newsletter</h3>
+            <p class="newsletter-desc">Get monthly updates on new features, tutorials, and community highlights. No spam, unsubscribe anytime.</p>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✅ Subscribed!\n\nYou\'ll receive our next newsletter in your inbox.');">
+                <input type="email" class="newsletter-input" placeholder="your@email.com" required>
+                <button type="submit" class="btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <main>
+        <!-- Featured Post -->
+        <section class="section" id="featured">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-icon">🌟</span>
+                    <h2 class="section-title">Featured This Month</h2>
+                    <p class="section-subtitle">Our most important announcement. Read what's changing in GateClaw.</p>
+                </div>
+            </div>
+
+            <article class="featured-post">
+                <div class="featured-content">
+                    <span class="featured-badge">⭐ Featured</span>
+                    <h3 class="featured-title">GateClaw v1.0 Release: Production-Ready Resident AI</h3>
+                    <p class="featured-excerpt">After 18 months of development, GateClaw hits 1.0 with production-ready stability, 40+ AI provider support, enterprise security features, and the Country Club community hub. This is the release that makes GateClaw ready for business.</p>
+                    <div class="featured-meta">
+                        <div class="featured-meta-item">📅 March 19, 2026</div>
+                        <div class="featured-meta-item">✍️ by uscha</div>
+                        <div class="featured-meta-item">⏱️ 8 min read</div>
+                    </div>
+                    <div class="featured-tags">
+                        <span class="featured-tag">Announcement</span>
+                        <span class="featured-tag">v1.0</span>
+                        <span class="featured-tag">Production</span>
+                        <span class="featured-tag">Enterprise</span>
+                    </div>
+                    <a href="#" class="featured-cta">Read Full Post →</a>
+                </div>
+                <div class="featured-image">🚀</div>
+            </article>
+        </section>
+
+        <!-- Latest Posts -->
+        <section class="section" id="latest">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-icon">📝</span>
+                    <h2 class="section-title">Latest Posts</h2>
+                    <p class="section-subtitle">Fresh from the press. All things GateClaw.</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filter-group">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Announcements</button>
+                        <button class="filter-btn">Tutorials</button>
+                        <button class="filter-btn">Changelogs</button>
+                        <button class="filter-btn">Community</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="posts-grid">
+                <article class="post-card announcement">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">GateClaw Country Club: Community Hub Launch</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 18, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by uscha</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-announcement">Announcement</span>
+                    </div>
+                    <p class="post-excerpt">Introducing GateClaw Country Club — a members-only community hub for sharing SOUL personalities, workflow templates, and automation scripts. Free lifetime membership for all users.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">Community</span>
+                        <span class="post-tag">Launch</span>
+                        <span class="post-tag">Country Club</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 5 min read</div>
+                        <div class="post-meta-item">💬 24 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+
+                <article class="post-card tutorial">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">Tutorial: Build E-commerce Automation with GateClaw</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 17, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by content_lead</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-tutorial">Tutorial</span>
+                    </div>
+                    <p class="post-excerpt">Step-by-step guide to building an e-commerce product listing automator. Connect GateClaw to Shopify/Amazon, generate SEO descriptions from CSV, and automate your entire catalog.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">E-commerce</span>
+                        <span class="post-tag">Shopify</span>
+                        <span class="post-tag">Automation</span>
+                        <span class="post-tag">Tutorial</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 12 min read</div>
+                        <div class="post-meta-item">💬 18 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+
+                <article class="post-card changelog">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">Changelog: v0.9.8 - Telegram Bot Improvements</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 15, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by dev_team</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-changelog">Changelog</span>
+                    </div>
+                    <p class="post-excerpt">Major Telegram bot improvements: file attachment support, group chat integration, custom commands, rate limiting fixes, and webhook notification system.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">Changelog</span>
+                        <span class="post-tag">Telegram</span>
+                        <span class="post-tag">v0.9.8</span>
+                        <span class="post-tag">Bot</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 3 min read</div>
+                        <div class="post-meta-item">💬 8 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+
+                <article class="post-card community">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">Community Spotlight: @dm_dave's D&D Campaign Generator</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 14, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by community_mgr</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-community">Community</span>
+                    </div>
+                    <p class="post-excerpt">Meet @dm_dave, creator of the most popular D&D campaign generator in the Country Club. 623 downloads, 4.8★ rating, and infinite procedural campaigns.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">Community</span>
+                        <span class="post-tag">Spotlight</span>
+                        <span class="post-tag">D&D</span>
+                        <span class="post-tag">Gaming</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 6 min read</div>
+                        <div class="post-meta-item">💬 31 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+
+                <article class="post-card tutorial">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">Tutorial: Set Up Daily Standup Reporter</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 12, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by scrum_master</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-tutorial">Tutorial</span>
+                    </div>
+                    <p class="post-excerpt">Automate your daily standups with GateClaw. Connect to git, Jira, and calendar. Post automatic updates to Slack every morning. Never write standup notes again.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">Tutorial</span>
+                        <span class="post-tag">Slack</span>
+                        <span class="post-tag">Standup</span>
+                        <span class="post-tag">Automation</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 10 min read</div>
+                        <div class="post-meta-item">💬 15 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+
+                <article class="post-card announcement">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">GateClaw Integrations Hub: 65+ Connections</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 10, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by uscha</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-announcement">Announcement</span>
+                    </div>
+                    <p class="post-excerpt">Launch of the Integrations Hub: Telegram, Discord, Slack, Stripe, Notion, GitHub, Plex, YouTube, and 65+ total connections. Connect everything, automate everything.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">Announcement</span>
+                        <span class="post-tag">Integrations</span>
+                        <span class="post-tag">Launch</span>
+                        <span class="post-tag">API</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 6 min read</div>
+                        <div class="post-meta-item">💬 42 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+
+                <article class="post-card changelog">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">Changelog: v0.9.7 - Model Switching Performance</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 8, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by dev_team</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-changelog">Changelog</span>
+                    </div>
+                    <p class="post-excerpt">Model switching performance improvements: 40% faster hot-swaps, TUI favorites sync to Telegram, model benchmark caching, and provider health checks.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">Changelog</span>
+                        <span class="post-tag">Performance</span>
+                        <span class="post-tag">Models</span>
+                        <span class="post-tag">v0.9.7</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 4 min read</div>
+                        <div class="post-meta-item">💬 12 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+
+                <article class="post-card tutorial">
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">Tutorial: Connect GateClaw to Notion Databases</h3>
+                            <div class="post-meta" style="margin-bottom: 0.5rem;">
+                                <span>📅 March 5, 2026</span>
+                                <span>·</span>
+                                <span>✍️ by productivity_guru</span>
+                            </div>
+                        </div>
+                        <span class="post-badge badge-tutorial">Tutorial</span>
+                    </div>
+                    <p class="post-excerpt">Complete guide to Notion integration. Create pages, update databases, generate content, sync meeting notes, and manage your team wiki automatically.</p>
+                    <div class="post-tags">
+                        <span class="post-tag">Tutorial</span>
+                        <span class="post-tag">Notion</span>
+                        <span class="post-tag">Database</span>
+                        <span class="post-tag">Productivity</span>
+                    </div>
+                    <div class="post-meta">
+                        <div class="post-meta-item">⏱️ 11 min read</div>
+                        <div class="post-meta-item">💬 22 comments</div>
+                    </div>
+                    <a href="#" class="post-cta">Read Post →</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Archive Section -->
+        <section class="section" id="archive">
+            <div class="archive-section">
+                <h2 class="archive-title">📁 Post Archive</h2>
+                <div class="archive-grid">
+                    <a href="#" class="archive-item">
+                        <div class="archive-month">March 2026</div>
+                        <div class="archive-count">12 posts</div>
+                    </a>
+                    <a href="#" class="archive-item">
+                        <div class="archive-month">February 2026</div>
+                        <div class="archive-count">8 posts</div>
+                    </a>
+                    <a href="#" class="archive-item">
+                        <div class="archive-month">January 2026</div>
+                        <div class="archive-count">10 posts</div>
+                    </a>
+                    <a href="#" class="archive-item">
+                        <div class="archive-month">December 2025</div>
+                        <div class="archive-count">6 posts</div>
+                    </a>
+                    <a href="#" class="archive-item">
+                        <div class="archive-month">November 2025</div>
+                        <div class="archive-count">9 posts</div>
+                    </a>
+                    <a href="#" class="archive-item">
+                        <div class="archive-month">October 2025</div>
+                        <div class="archive-count">7 posts</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                GateClaw Blog — News, Updates & Tutorials
+            </p>
+            <p class="footer-text">
+                <a href="https://github.com/gateclaw/gateclaw" class="footer-link" target="_blank">GitHub</a> •
+                <a href="#" class="footer-link">RSS Feed</a> •
+                <a href="#" class="footer-link">Submit Guest Post</a> •
+                <a href="#" class="footer-link">Editorial Guidelines</a>
+            </p>
+            <div class="footer-social">
+                <a href="#" class="social-link" title="Twitter">🐦</a>
+                <a href="#" class="social-link" title="Discord">💬</a>
+                <a href="#" class="social-link" title="LinkedIn">💼</a>
+                <a href="#" class="social-link" title="YouTube">▶️</a>
+                <a href="#" class="social-link" title="RSS">📡</a>
+            </div>
+            <p class="footer-text" style="margin-top: 1rem;" id="currentDate"></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentDate').textContent = 'Last updated: ' + new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        function subscribeRSS() {
+            alert('📡 RSS Subscription\n\nRSS Feed URL:\nhttps://blog.gateclaw.vercel.app/rss.xml\n\nAdd this to your RSS reader to never miss an update!');
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.post-card').forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Nav scroll highlight
+        window.addEventListener('scroll', () => {
+            const sections = ['featured', 'latest', 'tutorials', 'changelogs', 'archive'];
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    const top = section.offsetTop;
+                    const bottom = top + section.offsetHeight;
+
+                    if (scrollPos >= top && scrollPos < bottom) {
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

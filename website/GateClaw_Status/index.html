@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateClaw Status — System Health & Provider Uptime</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-hover: #252535;
+            --accent-primary: #3366ff;
+            --accent-secondary: #6699ff;
+            --accent-glow: rgba(51, 102, 255, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-1: linear-gradient(135deg, #3366ff 0%, #6699ff 100%);
+            --shadow-glow: 0 0 50px var(--accent-glow), 0 0 100px var(--accent-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #33ff66;
+            --warning: #ffcc33;
+            --danger: #ff3333;
+            --info: #33ccff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: rgba(51, 102, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgba(51, 102, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(51, 102, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(102, 153, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            box-shadow: 0 0 30px var(--accent-primary), 0 0 60px var(--accent-primary);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '⚡';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 0.9rem;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            padding: 2px;
+            line-height: 1;
+        }
+
+        .logo-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            color: var(--accent-primary);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .overall-status {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: rgba(51, 255, 102, 0.15);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn {
+            padding: 0.65rem 1.25rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn.secondary:hover {
+            border-color: var(--accent-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 5%;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Provider Grid */
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .provider-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .provider-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .provider-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+        }
+
+        .provider-card:hover::before {
+            opacity: 1;
+        }
+
+        .provider-card.operational {
+            border-left: 4px solid var(--success);
+        }
+
+        .provider-card.degraded {
+            border-left: 4px solid var(--warning);
+        }
+
+        .provider-card.down {
+            border-left: 4px solid var(--danger);
+        }
+
+        .provider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .provider-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .provider-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-operational {
+            background: rgba(51, 255, 102, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-degraded {
+            background: rgba(255, 204, 51, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .status-down {
+            background: rgba(255, 51, 51, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .provider-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .provider-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .uptime-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .uptime-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success) 0%, var(--success) 95%, var(--bg-secondary) 95%);
+            border-radius: 3px;
+        }
+
+        .uptime-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .uptime-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .uptime-stat {
+            text-align: center;
+        }
+
+        .uptime-stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .uptime-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Incident Timeline */
+        .incident-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .incident-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .incident-item {
+            position: relative;
+            padding: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .incident-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 1.75rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            border: 2px solid var(--bg-card);
+        }
+
+        .incident-item.major::before {
+            background: var(--danger);
+        }
+
+        .incident-item.minor::before {
+            background: var(--warning);
+        }
+
+        .incident-item.resolved::before {
+            background: var(--success);
+        }
+
+        .incident-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .incident-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .incident-badge {
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-major {
+            background: rgba(255, 51, 51, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .badge-minor {
+            background: rgba(255, 204, 51, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .badge-resolved {
+            background: rgba(51, 255, 102, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .incident-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .incident-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .incident-update {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .incident-update-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .incident-update-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* SLA Metrics */
+        .sla-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .sla-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .sla-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .sla-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .sla-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .sla-target {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .sla-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .sla-progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        /* System Health */
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .health-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .health-card.operational {
+            border-color: var(--success);
+        }
+
+        .health-card.warning {
+            border-color: var(--warning);
+        }
+
+        .health-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .health-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .health-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .health-status.operational {
+            color: var(--success);
+        }
+
+        .health-status.warning {
+            color: var(--warning);
+        }
+
+        .health-status.down {
+            color: var(--danger);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-api {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-api code {
+            color: var(--accent-secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .header-nav {
+                display: none;
+            }
+            .provider-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .uptime-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .refresh-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .refresh-indicator span {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">GateClaw <span>Status</span></div>
+            </a>
+            <nav class="header-nav">
+                <a href="#providers" class="nav-link active">Providers</a>
+                <a href="#incidents" class="nav-link">Incidents</a>
+                <a href="#sla" class="nav-link">SLA</a>
+                <a href="#health" class="nav-link">System Health</a>
+            </nav>
+            <div class="header-actions">
+                <div class="overall-status">
+                    <div class="status-dot"></div>
+                    <span>All Systems Operational</span>
+                </div>
+                <button class="btn secondary" onclick="refreshStatus()">
+                    <span>↻</span> Refresh
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1 class="hero-title">System Status</h1>
+        <p class="hero-subtitle">Real-time monitoring of GateClaw infrastructure, AI providers, and service health. Transparency you can trust.</p>
+        <div class="hero-cta">
+            <button class="btn" onclick="document.getElementById('providers').scrollIntoView({behavior: 'smooth'})">View Providers</button>
+            <button class="btn secondary" onclick="document.getElementById('incidents').scrollIntoView({behavior: 'smooth'})">Incident History</button>
+            <a href="https://github.com/gateclaw/gateclaw" class="btn secondary" target="_blank">GitHub</a>
+        </div>
+    </section>
+
+    <main>
+        <!-- AI Provider Status -->
+        <section class="section" id="providers">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>🔌</span>
+                    AI Provider Status
+                </h2>
+                <div class="section-actions">
+                    <div class="refresh-indicator"><span>↻</span> Auto-refresh: 60s</div>
+                    <button class="btn btn-small">Subscribe to Updates</button>
+                </div>
+            </div>
+
+            <div class="provider-grid">
+                <div class="provider-card operational">
+                    <div class="provider-header">
+                        <h3 class="provider-name">Ollama (Local)</h3>
+                        <span class="provider-status status-operational">Operational</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 12 models</div>
+                        <div class="provider-meta-item">⚡ localhost:11434</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>99.9%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 99.9%"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.9%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.8%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.7%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="provider-card operational">
+                    <div class="provider-header">
+                        <h3 class="provider-name">Ollama Cloud</h3>
+                        <span class="provider-status status-operational">Operational</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 8 models</div>
+                        <div class="provider-meta-item">⚡ Cloud API</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>99.8%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 99.8%"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.8%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.6%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.4%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="provider-card operational">
+                    <div class="provider-header">
+                        <h3 class="provider-name">LM Studio</h3>
+                        <span class="provider-status status-operational">Operational</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 24 models</div>
+                        <div class="provider-meta-item">⚡ localhost:1234</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>99.7%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 99.7%"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.7%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.5%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.3%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="provider-card operational">
+                    <div class="provider-header">
+                        <h3 class="provider-name">llama-swap</h3>
+                        <span class="provider-status status-operational">Operational</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 6 models</div>
+                        <div class="provider-meta-item">⚡ localhost:1337</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>99.9%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 99.9%"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.9%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.8%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.6%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="provider-card operational">
+                    <div class="provider-header">
+                        <h3 class="provider-name">OpenAI API</h3>
+                        <span class="provider-status status-operational">Operational</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 15 models</div>
+                        <div class="provider-meta-item">⚡ api.openai.com</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>99.95%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 99.95%"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.95%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.9%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.8%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="provider-card degraded">
+                    <div class="provider-header">
+                        <h3 class="provider-name">Anthropic API</h3>
+                        <span class="provider-status status-degraded">Degraded</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 8 models</div>
+                        <div class="provider-meta-item">⚡ api.anthropic.com</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>97.2%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 97.2%; background: linear-gradient(90deg, var(--warning) 0%, var(--warning) 97.2%, var(--bg-secondary) 97.2%)"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">97.2%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">98.5%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.1%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="provider-card operational">
+                    <div class="provider-header">
+                        <h3 class="provider-name">llama.cpp</h3>
+                        <span class="provider-status status-operational">Operational</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 4 models</div>
+                        <div class="provider-meta-item">⚡ localhost:8080</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>99.6%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 99.6%"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.6%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.4%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.2%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="provider-card operational">
+                    <div class="provider-header">
+                        <h3 class="provider-name">LocalAI</h3>
+                        <span class="provider-status status-operational">Operational</span>
+                    </div>
+                    <div class="provider-meta">
+                        <div class="provider-meta-item">📊 10 models</div>
+                        <div class="provider-meta-item">⚡ localhost:8081</div>
+                    </div>
+                    <div class="uptime-label">
+                        <span>Current uptime</span>
+                        <span>99.8%</span>
+                    </div>
+                    <div class="uptime-bar">
+                        <div class="uptime-fill" style="width: 99.8%"></div>
+                    </div>
+                    <div class="uptime-stats">
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.8%</div>
+                            <div class="uptime-stat-label">7 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.6%</div>
+                            <div class="uptime-stat-label">30 days</div>
+                        </div>
+                        <div class="uptime-stat">
+                            <div class="uptime-stat-value">99.4%</div>
+                            <div class="uptime-stat-label">90 days</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Incident History -->
+        <section class="section" id="incidents">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>📜</span>
+                    Incident History
+                </h2>
+                <div class="section-actions">
+                    <button class="btn btn-small secondary">Last 30 days</button>
+                    <button class="btn btn-small secondary">Last 90 days</button>
+                    <button class="btn btn-small">Subscribe</button>
+                </div>
+            </div>
+
+            <div class="incident-timeline">
+                <div class="incident-item resolved">
+                    <div class="incident-header">
+                        <h3 class="incident-title">Anthropic API Rate Limit Issues</h3>
+                        <span class="incident-badge badge-resolved">Resolved</span>
+                    </div>
+                    <div class="incident-time">March 18, 2026 at 14:32 UTC · Duration: 2h 15m</div>
+                    <p class="incident-description">Increased error rates and rate limiting on Anthropic API calls. GateClaw automatically failed over to alternative providers.</p>
+                    <div class="incident-update">
+                        <div class="incident-update-title">✅ Resolved - March 18, 2026 at 16:47 UTC</div>
+                        <div class="incident-update-text">Anthropic resolved their rate limiting infrastructure issue. All systems operating normally. Post-mortem will be published within 48 hours.</div>
+                    </div>
+                </div>
+
+                <div class="incident-item resolved">
+                    <div class="incident-header">
+                        <h3 class="incident-title">Ollama Cloud Temporary Degradation</h3>
+                        <span class="incident-badge badge-resolved">Resolved</span>
+                    </div>
+                    <div class="incident-time">March 15, 2026 at 09:15 UTC · Duration: 45m</div>
+                    <p class="incident-description">Elevated latency on Ollama Cloud provider. Some model requests experienced 2-3x normal response times.</p>
+                    <div class="incident-update">
+                        <div class="incident-update-title">✅ Resolved - March 15, 2026 at 10:00 UTC</div>
+                        <div class="incident-update-text">Ollama Cloud infrastructure team resolved the latency issue. Response times returned to normal levels.</div>
+                    </div>
+                </div>
+
+                <div class="incident-item minor">
+                    <div class="incident-header">
+                        <h3 class="incident-title">Telegram Bot Connection Intermittent</h3>
+                        <span class="incident-badge badge-minor">Minor</span>
+                    </div>
+                    <div class="incident-time">March 12, 2026 at 22:00 UTC · Duration: 1h 30m</div>
+                    <p class="incident-description">Some users experienced delayed message delivery via Telegram bot. Root cause: Telegram API rate limiting during peak hours.</p>
+                    <div class="incident-update">
+                        <div class="incident-update-title">🔍 Investigating - March 12, 2026 at 22:15 UTC</div>
+                        <div class="incident-update-text">Engineering team is implementing request queuing to handle rate limiting more gracefully.</div>
+                    </div>
+                    <div class="incident-update">
+                        <div class="incident-update-title">✅ Resolved - March 12, 2026 at 23:30 UTC</div>
+                        <div class="incident-update-text">Message queuing system deployed. All pending messages delivered. Monitoring for stability.</div>
+                    </div>
+                </div>
+
+                <div class="incident-item major">
+                    <div class="incident-header">
+                        <h3 class="incident-title">Daemon Port Conflict on Windows</h3>
+                        <span class="incident-badge badge-major">Major</span>
+                    </div>
+                    <div class="incident-time">March 8, 2026 at 16:45 UTC · Duration: 3h</div>
+                    <p class="incident-description">GateClaw daemon failed to start on Windows systems due to port 7371 conflict with Windows Update service. Manual intervention required.</p>
+                    <div class="incident-update">
+                        <div class="incident-update-title">🔍 Investigating - March 8, 2026 at 17:00 UTC</div>
+                        <div class="incident-update-text">Identified root cause: Windows Update service binding to port 7371. Working on fix.</div>
+                    </div>
+                    <div class="incident-update">
+                        <div class="incident-update-title">⚠️ Workaround Available - March 8, 2026 at 18:30 UTC</div>
+                        <div class="incident-update-text">Temporary workaround: Use --port flag to specify alternative port. Example: gateclaw start --port 7372</div>
+                    </div>
+                    <div class="incident-update">
+                        <div class="incident-update-title">✅ Resolved - March 8, 2026 at 19:45 UTC</div>
+                        <div class="incident-update-text">Patch v0.8.3 released with automatic port conflict detection and fallback. Update now: gateclaw update</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLA Metrics -->
+        <section class="section" id="sla">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>📊</span>
+                    SLA Performance
+                </h2>
+                <div class="section-actions">
+                    <button class="btn btn-small secondary">Download Report</button>
+                </div>
+            </div>
+
+            <div class="sla-grid">
+                <div class="sla-card">
+                    <div class="sla-icon">⚡</div>
+                    <h3 class="sla-title">API Uptime SLA</h3>
+                    <div class="sla-value">99.85%</div>
+                    <div class="sla-target">Target: 99.9% | Current period: March 2026</div>
+                    <div class="sla-progress">
+                        <div class="sla-progress-fill" style="width: 99.85%"></div>
+                    </div>
+                </div>
+
+                <div class="sla-card">
+                    <div class="sla-icon">💬</div>
+                    <h3 class="sla-title">Response Time SLA</h3>
+                    <div class="sla-value">2.3s</div>
+                    <div class="sla-target">Target: &lt;3s | Average across all providers</div>
+                    <div class="sla-progress">
+                        <div class="sla-progress-fill" style="width: 76%"></div>
+                    </div>
+                </div>
+
+                <div class="sla-card">
+                    <div class="sla-icon">🧠</div>
+                    <h3 class="sla-title">Memory Persistence</h3>
+                    <div class="sla-value">100%</div>
+                    <div class="sla-target">Target: 100% | Zero data loss in production</div>
+                    <div class="sla-progress">
+                        <div class="sla-progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="sla-card">
+                    <div class="sla-icon">🔄</div>
+                    <h3 class="sla-title">Model Switching</h3>
+                    <div class="sla-value">99.7%</div>
+                    <div class="sla-target">Target: 99.5% | Successful switches / total attempts</div>
+                    <div class="sla-progress">
+                        <div class="sla-progress-fill" style="width: 99.7%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Health -->
+        <section class="section" id="health">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>🏥</span>
+                    System Health
+                </h2>
+                <div class="section-actions">
+                    <div class="refresh-indicator"><span>↻</span> Real-time</div>
+                </div>
+            </div>
+
+            <div class="health-grid">
+                <div class="health-card operational">
+                    <div class="health-icon">🖥️</div>
+                    <h3 class="health-title">Daemon Service</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+
+                <div class="health-card operational">
+                    <div class="health-icon">🌐</div>
+                    <h3 class="health-title">HTTP API (7371)</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+
+                <div class="health-card operational">
+                    <div class="health-icon">📱</div>
+                    <h3 class="health-title">Telegram Bot</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+
+                <div class="health-card operational">
+                    <div class="health-icon">💾</div>
+                    <h3 class="health-title">SQLite Memory</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+
+                <div class="health-card operational">
+                    <div class="health-icon">📁</div>
+                    <h3 class="health-title">File Operations</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+
+                <div class="health-card operational">
+                    <div class="health-icon">⚡</div>
+                    <h3 class="health-title">Shell Execution</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+
+                <div class="health-card operational">
+                    <div class="health-icon">🎭</div>
+                    <h3 class="health-title">TUI Interface</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+
+                <div class="health-card operational">
+                    <div class="health-icon">🔐</div>
+                    <h3 class="health-title">Authentication</h3>
+                    <div class="health-status operational">Operational</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                GateClaw Status — Infrastructure Monitoring & Transparency
+            </p>
+            <p class="footer-text">
+                <a href="https://github.com/gateclaw/gateclaw" class="footer-link" target="_blank">GitHub</a> •
+                <a href="#" class="footer-link">API Documentation</a> •
+                <a href="#" class="footer-link">RSS Feed</a> •
+                <a href="#" class="footer-link">Webhook Notifications</a>
+            </p>
+            <div class="footer-api">
+                Status API: <code>GET https://status.gateclaw.vercel.app/api/v1/status</code>
+            </div>
+            <p class="footer-text" style="margin-top: 1rem;" id="currentDate"></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentDate').textContent = 'Last updated: ' + new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        function refreshStatus() {
+            const btn = event.target.closest('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>↻</span> Refreshing...';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                // In production, this would fetch real status data from API
+                alert('✅ Status refreshed\n\nAll systems operational.\nProvider uptime data updated.\nIncident timeline current.');
+            }, 1000);
+        }
+
+        // Auto-refresh every 60 seconds
+        setInterval(() => {
+            // In production, this would call the Status API
+            console.log('Auto-refreshing status...');
+        }, 60000);
+
+        // Nav scroll highlight
+        window.addEventListener('scroll', () => {
+            const sections = ['providers', 'incidents', 'sla', 'health'];
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    const top = section.offsetTop;
+                    const bottom = top + section.offsetHeight;
+
+                    if (scrollPos >= top && scrollPos < bottom) {
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

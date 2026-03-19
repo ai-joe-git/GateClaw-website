@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GateClaw Integrations — Connect Everything</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --bg-hover: #252535;
+            --accent-primary: #3366ff;
+            --accent-secondary: #6699ff;
+            --accent-glow: rgba(51, 102, 255, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border: #2a2a3a;
+            --gradient-1: linear-gradient(135deg, #3366ff 0%, #6699ff 100%);
+            --shadow-glow: 0 0 50px var(--accent-glow), 0 0 100px var(--accent-glow);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success: #33ff66;
+            --telegram: #229ED9;
+            --discord: #5865F2;
+            --slack: #E01E5A;
+            --stripe: #635BFF;
+            --github: #24292e;
+            --notion: #E4E4E4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: rgba(51, 102, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgba(51, 102, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(51, 102, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(102, 153, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            box-shadow: 0 0 30px var(--accent-primary), 0 0 60px var(--accent-primary);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+
+        .logo-icon::after {
+            content: '🔌';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 0.9rem;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            padding: 2px;
+            line-height: 1;
+        }
+
+        .logo-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            color: var(--accent-primary);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.65rem 1.25rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn.secondary:hover {
+            border-color: var(--accent-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 5%;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(51, 102, 255, 0.15);
+            border: 1px solid var(--accent-primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title-group {
+            max-width: 600px;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        /* Integration Cards Grid */
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .integration-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .integration-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .integration-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .integration-card:hover::before {
+            opacity: 1;
+        }
+
+        .integration-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .integration-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .integration-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .integration-logo.telegram {
+            background: var(--telegram);
+        }
+
+        .integration-logo.discord {
+            background: var(--discord);
+        }
+
+        .integration-logo.slack {
+            background: var(--slack);
+        }
+
+        .integration-logo.stripe {
+            background: var(--stripe);
+        }
+
+        .integration-logo.github {
+            background: var(--github);
+        }
+
+        .integration-logo.notion {
+            background: var(--notion);
+            color: #000;
+        }
+
+        .integration-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .integration-type {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .integration-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-available {
+            background: rgba(51, 204, 102, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-beta {
+            background: rgba(255, 204, 51, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .status-soon {
+            background: rgba(51, 102, 255, 0.15);
+            color: var(--accent-primary);
+            border: 1px solid var(--accent-primary);
+        }
+
+        .integration-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .integration-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .integration-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .integration-features li::before {
+            content: '✓';
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        .integration-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
+        }
+
+        .integration-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .integration-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .integration-btn {
+            flex: 1;
+            padding: 0.65rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .integration-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .integration-btn.primary {
+            background: var(--gradient-1);
+            border: none;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .integration-btn.primary:hover {
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Category Sections */
+        .category-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .cta-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .cta-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .cta-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .cta-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-api {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-api code {
+            color: var(--accent-secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .header-nav {
+                display: none;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .integrations-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .cta-form {
+                flex-direction: column;
+            }
+            .cta-input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">GateClaw <span>Integrations</span></div>
+            </a>
+            <nav class="header-nav">
+                <a href="#messaging" class="nav-link active">Messaging</a>
+                <a href="#media" class="nav-link">Media</a>
+                <a href="#payments" class="nav-link">Payments</a>
+                <a href="#productivity" class="nav-link">Productivity</a>
+                <a href="#dev" class="nav-link">Dev Tools</a>
+            </nav>
+            <div class="header-actions">
+                <button class="btn secondary" onclick="requestIntegration()">Request Integration</button>
+                <a href="https://github.com/gateclaw/gateclaw" class="btn secondary" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-badge">🔌 Connect Everything</div>
+        <h1 class="hero-title">Integrate GateClaw With Your Stack</h1>
+        <p class="hero-subtitle">GateClaw connects to 40+ AI providers plus your favorite tools: messaging apps, media servers, payment processors, databases, and dev platforms. Build automation that spans your entire workflow.</p>
+        
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-value">65+</div>
+                <div class="stat-label">Integrations</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">40+</div>
+                <div class="stat-label">AI Providers</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Open API</div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <!-- Messaging & Communication -->
+        <section class="section" id="messaging">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <span class="section-icon">💬</span>
+                    <h2 class="section-title">Messaging & Communication</h2>
+                    <p class="section-subtitle">Connect GateClaw to your team's communication channels. Automate responses, notifications, and workflows.</p>
+                </div>
+                <div class="section-actions">
+                    <div class="filter-group">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Available</button>
+                        <button class="filter-btn">Beta</button>
+                        <button class="filter-btn">Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo telegram">📱</div>
+                            <div>
+                                <h3 class="integration-name">Telegram Bot</h3>
+                                <div class="integration-type">Primary Interface</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-available">Available</span>
+                    </div>
+                    <p class="integration-desc">Mobile-first chat interface. Send/receive messages, trigger automations, check system status — all from your phone. GateClaw's primary interface.</p>
+                    <ul class="integration-features">
+                        <li>Real-time messaging</li>
+                        <li>File attachments support</li>
+                        <li>Group chat integration</li>
+                        <li>Custom bot commands</li>
+                        <li>Webhook notifications</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Full docs</div>
+                        <div class="integration-meta-item">⚡ Instant setup</div>
+                        <div class="integration-meta-item">🔓 Open source</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo discord">🎮</div>
+                            <div>
+                                <h3 class="integration-name">Discord Bot</h3>
+                                <div class="integration-type">Community Interface</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-available">Available</span>
+                    </div>
+                    <p class="integration-desc">Engage with your Discord community. GateClaw moderates, answers questions, runs trivia, manages events, and posts updates automatically.</p>
+                    <ul class="integration-features">
+                        <li>Server moderation</li>
+                        <li>Custom slash commands</li>
+                        <li>Event scheduling</li>
+                        <li>Role management</li>
+                        <li>Embed message formatting</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Full docs</div>
+                        <div class="integration-meta-item">⚡ 15 min setup</div>
+                        <div class="integration-meta-item">🔓 Open source</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo slack">💼</div>
+                            <div>
+                                <h3 class="integration-name">Slack Bot</h3>
+                                <div class="integration-type">Business Interface</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Integrate GateClaw into your workspace. Daily standups, meeting notes, project updates, on-call alerts — all automated via Slack.</p>
+                    <ul class="integration-features">
+                        <li>Channel messaging</li>
+                        <li>Thread replies</li>
+                        <li>Interactive blocks</li>
+                        <li>Scheduled reminders</li>
+                        <li>App mentions</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 30 min setup</div>
+                        <div class="integration-meta-item">🔧 OAuth required</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Beta</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #0088cc;">✉️</div>
+                            <div>
+                                <h3 class="integration-name">Email (SMTP/IMAP)</h3>
+                                <div class="integration-type">Communication</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Send and receive emails via GateClaw. Automated responses, newsletter generation, inbox triage, calendar invites — email automation complete.</p>
+                    <ul class="integration-features">
+                        <li>SMTP sending</li>
+                        <li>IMAP reading</li>
+                        <li>Attachment handling</li>
+                        <li>HTML templates</li>
+                        <li>SPF/DKIM support</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 20 min setup</div>
+                        <div class="integration-meta-item">🔐 Credentials needed</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Beta</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #0066cc;">📞</div>
+                            <div>
+                                <h3 class="integration-name">Twilio Voice/SMS</h3>
+                                <div class="integration-type">Telephony</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">Voice AI call center replacement. GateClaw + ElevenLabs handles inbound support calls, outbound sales, appointment scheduling via Twilio.</p>
+                    <ul class="integration-features">
+                        <li>Voice call handling</li>
+                        <li>SMS automation</li>
+                        <li>Call recording</li>
+                        <li>IVR menus</li>
+                        <li>VoIP integration</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q2</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #1DA1F2;">🐦</div>
+                            <div>
+                                <h3 class="integration-name">Twitter/X API</h3>
+                                <div class="integration-type">Social Media</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">Automate your Twitter presence. GateClaw posts tweets, replies to mentions, monitors trends, schedules content, engages with followers.</p>
+                    <ul class="integration-features">
+                        <li>Tweet scheduling</li>
+                        <li>Reply automation</li>
+                        <li>Trend monitoring</li>
+                        <li>Thread generation</li>
+                        <li>Analytics tracking</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q3</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Media & Entertainment -->
+        <section class="section" id="media">
+            <div class="category-badge">🎬 Media Servers & Streaming</div>
+            
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2 class="section-title">Media & Entertainment</h2>
+                    <p class="section-subtitle">Connect GateClaw to your media library. Organize, curate, and automate your entertainment experience.</p>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #e5a52a;">📺</div>
+                        <div>
+                                <h3 class="integration-name">Plex Media Server</h3>
+                                <div class="integration-type">Media Organization</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Organize your movie/TV library. GateClaw tracks watch history, generates recommendations, manages subtitles, posts to Plex chat.</p>
+                    <ul class="integration-features">
+                        <li>Library scanning</li>
+                        <li>Watch history sync</li>
+                        <li>Metadata updates</li>
+                        <li>Subtitle management</li>
+                        <li>Plex chat integration</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 25 min setup</div>
+                        <div class="integration-meta-item">🔑 Plex token</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #cc1e4c;">🎬</div>
+                            <div>
+                                <h3 class="integration-name">Jellyfin</h3>
+                                <div class="integration-type">Media Organization</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">Open-source alternative to Plex. GateClaw manages your Jellyfin library, tracks viewing, generates watch parties, curates playlists.</p>
+                    <ul class="integration-features">
+                        <li>Library management</li>
+                        <li>User activity tracking</li>
+                        <li>Watch party hosting</li>
+                        <li>Playlist curation</li>
+                        <li>Metadata enrichment</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q2</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #1ed760;">🎵</div>
+                            <div>
+                                <h3 class="integration-name">Spotify</h3>
+                                <div class="integration-type">Music Streaming</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">Music automation via Spotify API. GateClaw creates playlists, analyzes listening habits, shares tracks, generates music recommendations.</p>
+                    <ul class="integration-features">
+                        <li>Playlist creation</li>
+                        <li>Listening analytics</li>
+                        <li>Track sharing</li>
+                        <li>Genre analysis</li>
+                        <li>Collaborative playlists</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q3</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #ff0000;">▶️</div>
+                            <div>
+                                <h3 class="integration-name">YouTube Data API</h3>
+                                <div class="integration-type">Video Platform</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">YouTube automation. GateClaw uploads videos, manages playlists, analyzes analytics, responds to comments, schedules content.</p>
+                    <ul class="integration-features">
+                        <li>Video upload automation</li>
+                        <li>Playlist management</li>
+                        <li>Analytics dashboard</li>
+                        <li>Comment moderation</li>
+                        <li>Content scheduling</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 40 min setup</div>
+                        <div class="integration-meta-item">🔑 OAuth 2.0</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payments & E-commerce -->
+        <section class="section" id="payments">
+            <div class="category-badge">💰 Payments & Commerce</div>
+            
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2 class="section-title">Payments & E-commerce</h2>
+                    <p class="section-subtitle">Automate your business revenue. Connect GateClaw to payment processors, e-commerce platforms, and financial tools.</p>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo stripe">💳</div>
+                            <div>
+                                <h3 class="integration-name">Stripe</h3>
+                                <div class="integration-type">Payment Processing</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Payment automation via Stripe. GateClaw processes charges, manages subscriptions, sends invoices, tracks revenue, handles disputes.</p>
+                    <ul class="integration-features">
+                        <li>Charge processing</li>
+                        <li>Subscription management</li>
+                        <li>Invoice generation</li>
+                        <li>Revenue analytics</li>
+                        <li>Webhook handling</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 30 min setup</div>
+                        <div class="integration-meta-item">🔑 API keys</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #003087;">🅿️</div>
+                            <div>
+                                <h3 class="integration-name">PayPal</h3>
+                                <div class="integration-type">Payment Processing</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">PayPal integration for payments. GateClaw processes transactions, manages recurring billing, handles refunds, tracks payment history.</p>
+                    <ul class="integration-features">
+                        <li>Payment processing</li>
+                        <li>Recurring billing</li>
+                        <li>Refund handling</li>
+                        <li>Payment history</li>
+                        <li>Invoice creation</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q3</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #96bf48;">🛒</div>
+                            <div>
+                                <h3 class="integration-name">Shopify</h3>
+                                <div class="integration-type">E-commerce Platform</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">E-commerce automation for Shopify. GateClaw manages products, processes orders, handles customer support, generates product descriptions.</p>
+                    <ul class="integration-features">
+                        <li>Product management</li>
+                        <li>Order processing</li>
+                        <li>Customer support</li>
+                        <li>Content generation</li>
+                        <li>Inventory tracking</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q4</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #ff9900;">📦</div>
+                            <div>
+                                <h3 class="integration-name">Amazon Seller API</h3>
+                                <div class="integration-type">Marketplace</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">Amazon marketplace automation. GateClaw lists products, manages inventory, processes orders, handles customer messages, generates listings.</p>
+                    <ul class="integration-features">
+                        <li>Product listing</li>
+                        <li>Inventory sync</li>
+                        <li>Order fulfillment</li>
+                        <li>Message handling</li>
+                        <li>SEO optimization</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q4</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Productivity & Databases -->
+        <section class="section" id="productivity">
+            <div class="category-badge">📊 Productivity & Knowledge</div>
+            
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2 class="section-title">Productivity & Databases</h2>
+                    <p class="section-subtitle">Connect GateClaw to your knowledge base. Automate data entry, sync databases, manage projects, organize information.</p>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo notion">📝</div>
+                            <div>
+                                <h3 class="integration-name">Notion</h3>
+                                <div class="integration-type">Knowledge Base</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Notion database automation. GateClaw creates pages, updates databases, generates content, syncs meeting notes, manages wikis.</p>
+                    <ul class="integration-features">
+                        <li>Page creation</li>
+                        <li>Database updates</li>
+                        <li>Content generation</li>
+                        <li>Meeting notes sync</li>
+                        <li>Wiki management</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 20 min setup</div>
+                        <div class="integration-meta-item">🔑 Integration token</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #fc636b;">🗃️</div>
+                            <div>
+                                <h3 class="integration-name">Airtable</h3>
+                                <div class="integration-type">Database</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Airtable base automation. GateClaw creates records, updates fields, generates reports, syncs data, manages relationships.</p>
+                    <ul class="integration-features">
+                        <li>Record creation</li>
+                        <li>Field updates</li>
+                        <li>Report generation</li>
+                        <li>Data synchronization</li>
+                        <li>Relationship management</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 25 min setup</div>
+                        <div class="integration-meta-item">🔑 API key</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #f39c12;">📋</div>
+                            <div>
+                                <h3 class="integration-name">Google Sheets</h3>
+                                <div class="integration-type">Spreadsheet</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-available">Available</span>
+                    </div>
+                    <p class="integration-desc">Google Sheets automation. GateClaw reads/writes cells, generates formulas, creates charts, exports data, syncs with other tools.</p>
+                    <ul class="integration-features">
+                        <li>Cell read/write</li>
+                        <li>Formula generation</li>
+                        <li>Chart creation</li>
+                        <li>Data export</li>
+                        <li>Cross-tool sync</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Full docs</div>
+                        <div class="integration-meta-item">⚡ 15 min setup</div>
+                        <div class="integration-meta-item">🔑 OAuth 2.0</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #000000; color: #fff;">📅</div>
+                            <div>
+                                <h3 class="integration-name">Google Calendar</h3>
+                                <div class="integration-type">Calendar</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-available">Available</span>
+                    </div>
+                    <p class="integration-desc">Calendar automation. GateClaw creates events, sends reminders, manages invites, syncs schedules, posts daily agendas.</p>
+                    <ul class="integration-features">
+                        <li>Event creation</li>
+                        <li>Reminder sending</li>
+                        <li>Invite management</li>
+                        <li>Schedule sync</li>
+                        <li>Agenda posting</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Full docs</div>
+                        <div class="integration-meta-item">⚡ 10 min setup</div>
+                        <div class="integration-meta-item">🔑 OAuth 2.0</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #0066ff;">🗂️</div>
+                            <div>
+                                <h3 class="integration-name">Dropbox</h3>
+                                <div class="integration-type">Cloud Storage</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Dropbox file automation. GateClaw uploads/downloads files, organizes folders, shares links, syncs backups, manages versions.</p>
+                    <ul class="integration-features">
+                        <li>File upload/download</li>
+                        <li>Folder organization</li>
+                        <li>Link sharing</li>
+                        <li>Backup sync</li>
+                        <li>Version management</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 20 min setup</div>
+                        <div class="integration-meta-item">🔑 OAuth 2.0</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #0078d7;">☁️</div>
+                            <div>
+                                <h3 class="integration-name">OneDrive</h3>
+                                <div class="integration-type">Cloud Storage</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">OneDrive integration for Microsoft ecosystem. GateClaw manages files, syncs documents, shares folders, automates backups.</p>
+                    <ul class="integration-features">
+                        <li>File management</li>
+                        <li>Document sync</li>
+                        <li>Folder sharing</li>
+                        <li>Backup automation</li>
+                        <li>Office integration</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q3</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Development Tools -->
+        <section class="section" id="dev">
+            <div class="category-badge">💻 Development & DevOps</div>
+            
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2 class="section-title">Development Tools</h2>
+                    <p class="section-subtitle">Connect GateClaw to your dev workflow. Automate code reviews, deployments, monitoring, and team collaboration.</p>
+                </div>
+            </div>
+
+            <div class="integrations-grid">
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo github">🐙</div>
+                            <div>
+                                <h3 class="integration-name">GitHub</h3>
+                                <div class="integration-type">Version Control</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-available">Available</span>
+                    </div>
+                    <p class="integration-desc">GitHub automation. GateClaw monitors PRs, posts code reviews, manages issues, triggers CI/CD, generates release notes.</p>
+                    <ul class="integration-features">
+                        <li>PR monitoring</li>
+                        <li>Code review comments</li>
+                        <li>Issue management</li>
+                        <li>CI/CD triggers</li>
+                        <li>Release notes</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Full docs</div>
+                        <div class="integration-meta-item">⚡ 15 min setup</div>
+                        <div class="integration-meta-item">🔑 Personal token</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #fc6d26;">🦊</div>
+                            <div>
+                                <h3 class="integration-name">GitLab</h3>
+                                <div class="integration-type">Version Control</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">GitLab integration. GateClaw manages merge requests, runs pipelines, tracks issues, posts commit messages, generates MR descriptions.</p>
+                    <ul class="integration-features">
+                        <li>MR management</li>
+                        <li>Pipeline triggering</li>
+                        <li>Issue tracking</li>
+                        <li>Commit posting</li>
+                        <li>MR generation</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 20 min setup</div>
+                        <div class="integration-meta-item">🔑 OAuth token</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #24292e;">🚀</div>
+                            <div>
+                                <h3 class="integration-name">Docker</h3>
+                                <div class="integration-type">Containerization</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-beta">Beta</span>
+                    </div>
+                    <p class="integration-desc">Docker container management. GateClaw builds images, starts/stops containers, monitors logs, manages volumes, orchestrates compose.</p>
+                    <ul class="integration-features">
+                        <li>Image building</li>
+                        <li>Container lifecycle</li>
+                        <li>Log monitoring</li>
+                        <li>Volume management</li>
+                        <li>Compose orchestration</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📚 Beta docs</div>
+                        <div class="integration-meta-item">⚡ 25 min setup</div>
+                        <div class="integration-meta-item">🔧 Docker socket</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Connect</a>
+                        <a href="#" class="integration-btn">Guide</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #326ce5;">⎈</div>
+                            <div>
+                                <h3 class="integration-name">Kubernetes</h3>
+                                <div class="integration-type">Orchestration</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">K8s cluster management. GateClaw deploys pods, scales replicas, monitors health, manages configs, posts incident alerts.</p>
+                    <ul class="integration-features">
+                        <li>Pod deployment</li>
+                        <li>Replica scaling</li>
+                        <li>Health monitoring</li>
+                        <li>Config management</li>
+                        <li>Alert posting</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q4</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #47a84c;">📊</div>
+                            <div>
+                                <h3 class="integration-name">Grafana</h3>
+                                <div class="integration-type">Monitoring</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">Grafana metrics integration. GateClaw queries dashboards, posts alerts, correlates events, generates incident reports, tracks SLOs.</p>
+                    <ul class="integration-features">
+                        <li>Dashboard queries</li>
+                        <li>Alert posting</li>
+                        <li>Event correlation</li>
+                        <li>Incident reports</li>
+                        <li>SLO tracking</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q3</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-brand">
+                            <div class="integration-logo" style="background: #f26b00;">🔍</div>
+                            <div>
+                                <h3 class="integration-name">Elasticsearch</h3>
+                                <div class="integration-type">Search & Logs</div>
+                            </div>
+                        </div>
+                        <span class="integration-status status-soon">Coming Soon</span>
+                    </div>
+                    <p class="integration-desc">Elasticsearch log analysis. GateClaw queries logs, correlates events, detects anomalies, generates reports, posts alerts.</p>
+                    <ul class="integration-features">
+                        <li>Log querying</li>
+                        <li>Event correlation</li>
+                        <li>Anomaly detection</li>
+                        <li>Report generation</li>
+                        <li>Alert posting</li>
+                    </ul>
+                    <div class="integration-meta">
+                        <div class="integration-meta-item">📋 Roadmap Q4</div>
+                        <div class="integration-meta-item">⏳ Waitlist</div>
+                    </div>
+                    <div class="integration-actions">
+                        <a href="#" class="integration-btn primary">Join Waitlist</a>
+                        <a href="#" class="integration-btn">Roadmap</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Request Integration CTA -->
+        <section class="section">
+            <div class="cta-section">
+                <h2 class="cta-title">Request an Integration</h2>
+                <p class="cta-desc">Don't see what you need? Request a custom integration. We prioritize based on community demand. Most requested: Zapier, Make, HubSpot, Salesforce.</p>
+                
+                <form class="cta-form" onsubmit="event.preventDefault(); alert('✅ Request submitted!\n\nWe\'ll notify you when this integration is available.');">
+                    <input type="text" class="cta-input" placeholder="Integration name (e.g., Zapier, HubSpot, etc.)" required>
+                    <input type="email" class="cta-input" placeholder="Your email for updates" required>
+                    <button type="submit" class="btn">Request Integration</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">
+                GateClaw Integrations — Connect Everything, Automate Everything
+            </p>
+            <p class="footer-text">
+                <a href="https://github.com/gateclaw/gateclaw" class="footer-link" target="_blank">GitHub</a> •
+                <a href="#" class="footer-link">Integration Docs</a> •
+                <a href="#" class="footer-link">API Reference</a> •
+                <a href="#" class="footer-link">Webhook Guide</a> •
+                <a href="#" class="footer-link">Request Integration</a>
+            </p>
+            <div class="footer-api">
+                Integration API: <code>POST /api/v1/integrations/connect</code> • Webhook: <code>https://your-domain.com/webhook</code>
+            </div>
+            <p class="footer-text" style="margin-top: 1rem;" id="currentDate"></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentDate').textContent = 'Last updated: ' + new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        function requestIntegration() {
+            document.getElementById('dev').scrollIntoView({behavior: 'smooth'});
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Nav scroll highlight
+        window.addEventListener('scroll', () => {
+            const sections = ['messaging', 'media', 'payments', 'productivity', 'dev'];
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    const top = section.offsetTop;
+                    const bottom = top + section.offsetHeight;
+
+                    if (scrollPos >= top && scrollPos < bottom) {
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
